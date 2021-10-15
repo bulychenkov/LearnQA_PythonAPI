@@ -4,7 +4,7 @@ import json
 
 with open(f'{sys.path[0]}/pass_table.json') as f:
     table_json = json.loads(f.read())
-pass_table = [[c['children'][0]['name'] for j, c in enumerate(r['children']) if j > 0]
+pass_table = [[c['children'][0]['name'].strip() for j, c in enumerate(r['children']) if j > 0]
               for i, r in enumerate(table_json['children']) if i > 1]
 
 pass_list = []
@@ -22,10 +22,9 @@ for password in pass_list:
     cookie_value = response.cookies.get('auth_cookie')
     cookie = {'auth_cookie': cookie_value}
     response = requests.post(url_check, cookies=cookie)
-    print(response.text)
     if response.text != 'You are NOT authorized':
         correct_password = password
         check_response = response.text
-        print(f'{check_response}. Correct password is {correct_password}')
+        print(f'{check_response}. Correct password is "{correct_password}"')
         break
 
